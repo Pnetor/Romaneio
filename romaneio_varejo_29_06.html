@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Romaneio Varejo — 29/06</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card2: #20243a;
+    --border: #2a2f45;
+    --accent: #e8a020;
+    --accent2: #3b82f6;
+    --green: #22c55e;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --tag-bg: #1e2236;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .logo h1 { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+  .logo p { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  .header-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+  .stat {
+    text-align: center;
+    background: rgba(232,160,32,0.08);
+    border: 1px solid rgba(232,160,32,0.2);
+    border-radius: 10px;
+    padding: 8px 16px;
+  }
+  .stat-num { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+  .stat-lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── FILTERS ── */
+  .filters {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+  .filter-group label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .filter-group select,
+  .filter-group input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 7px 10px;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color .2s;
+    width: 100%;
+  }
+  .filter-group select:focus,
+  .filter-group input:focus { border-color: var(--accent); }
+  .filter-group select option { background: #1a1d27; }
+
+  .btn-clear {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    padding: 7px 16px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 16px;
+  }
+  .btn-clear:hover { border-color: var(--accent); color: var(--accent); }
+
+  .count-badge {
+    margin-top: 16px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .count-badge span { color: var(--accent); font-weight: 700; }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    padding: 20px 24px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  thead th {
+    background: var(--card2);
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: sticky;
+    top: 0;
+  }
+  thead th:hover { color: var(--accent); }
+  thead th .sort-icon { margin-left: 4px; opacity: 0.4; }
+  thead th.sorted .sort-icon { opacity: 1; color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(42,47,69,0.6);
+    transition: background .15s;
+  }
+  tbody tr:hover { background: rgba(59,130,246,0.05); }
+  tbody td { padding: 9px 12px; vertical-align: middle; }
+
+  .nf-badge {
+    background: rgba(232,160,32,0.12);
+    border: 1px solid rgba(232,160,32,0.25);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .placa-badge {
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+  .cidade-tag {
+    display: inline-flex; align-items: center;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-size: 0.74rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .motorista-text { color: var(--text); font-weight: 500; }
+  .cliente-name { font-weight: 600; color: var(--text); display: block; line-height: 1.3; }
+  .cliente-cod { font-size: 0.72rem; color: var(--muted); }
+  .vendedor-text { color: #a0a8c0; font-size: 0.78rem; }
+
+  /* ── EMPTY ── */
+  .empty {
+    text-align: center;
+    padding: 60px;
+    color: var(--muted);
+  }
+  .empty .icon { font-size: 3rem; margin-bottom: 12px; opacity: .4; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    header { padding: 12px 16px; }
+    .filters { padding: 12px 16px; }
+    .table-wrap { padding: 12px 8px; }
+    .filter-group { min-width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🚚</div>
+    <div>
+      <h1>Romaneio de Cargas — Varejo</h1>
+      <p>Filial 01052 &nbsp;·&nbsp; 29 de junho de 2026</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-num" id="total-nfs">—</div><div class="stat-lbl">Notas</div></div>
+    <div class="stat"><div class="stat-num" id="total-motoristas">—</div><div class="stat-lbl">Motoristas</div></div>
+    <div class="stat"><div class="stat-num" id="total-cidades">—</div><div class="stat-lbl">Cidades</div></div>
+    <div class="stat"><div class="stat-num" id="total-clientes">—</div><div class="stat-lbl">Clientes</div></div>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="filter-group" style="flex:1; min-width:180px;">
+    <label>🔍 Busca livre</label>
+    <input type="text" id="f-busca" placeholder="NF, cliente, código, endereço…">
+  </div>
+  <div class="filter-group">
+    <label>🧑‍✈️ Motorista</label>
+    <select id="f-motorista"><option value="">Todos</option></select>
+  </div>
+  <div class="filter-group">
+    <label>🚘 Placa</label>
+    <select id="f-placa"><option value="">Todas</option></select>
+  </div>
+  <div class="filter-group">
+    <label>🏙️ Cidade</label>
+    <select id="f-cidade"><option value="">Todas</option></select>
+  </div>
+  <div class="filter-group">
+    <label>🧑‍💼 Vendedor</label>
+    <select id="f-vendedor"><option value="">Todos</option></select>
+  </div>
+  <button class="btn-clear" onclick="clearFilters()">✕ Limpar</button>
+  <div class="count-badge">Exibindo <span id="count-vis">—</span> de <span id="count-tot">—</span></div>
+</div>
+
+<div class="table-wrap">
+  <table id="main-table">
+    <thead>
+      <tr>
+        <th onclick="sortBy('nr_nf')" title="Ordenar por NF">Nº Nota <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('romaneio')" title="Ordenar por Romaneio">Romaneio <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('motorista')" title="Ordenar por Motorista">Motorista <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('placa')" title="Ordenar por Placa">Placa <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('cd_cliente')" title="Ordenar por Cód. Cliente">Cliente <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('cidade')" title="Ordenar por Cidade">Cidade <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('vendedor')" title="Ordenar por Vendedor">Vendedor <span class="sort-icon">↕</span></th>
+        <th>Endereço</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty-msg" style="display:none">
+    <div class="icon">📦</div>
+    <p>Nenhum registro encontrado para os filtros selecionados.</p>
+  </div>
+</div>
+
+<script>
+const RAW = [{"filial": "01052", "romaneio": "03050701", "nr_nf": "000183837", "pedido": "189977", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/04", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA BRASIL, 715", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183837", "pedido": "189977", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/04", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA BRASIL, 715", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183838", "pedido": "189976", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/17", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "RUA NORUEGA, 333", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183838", "pedido": "189976", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/17", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "RUA NORUEGA, 333", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183839", "pedido": "189972", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/03", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA ANTONIO RAMINELLI, 1518", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183839", "pedido": "189972", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/03", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA ANTONIO RAMINELLI, 1518", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183840", "pedido": "189974", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/02", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA ANTONIO RAMINELLI, 311", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183840", "pedido": "189974", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/02", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA ANTONIO RAMINELLI, 311", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183841", "pedido": "189978", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "002038/18", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "RUA TATUAPE, 12", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183842", "pedido": "189772", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "054949/01", "ds_cliente": "TOSCANO GRILL RESTAURANTE LTDA", "cnpj": "", "endereco": "AV ROBERTO CONCEICAO, 501, 501", "cidade": "CAMBE", "vendedor": "RODRIGO GLAUBER CORREA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183843", "pedido": "189857", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "060999/01", "ds_cliente": "MARILI F. FRANCISCONI & CIA LTDA", "cnpj": "", "endereco": "RODOVIA PR 986, 0", "cidade": "ROLANDIA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183844", "pedido": "189873", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "007919/01", "ds_cliente": "LANCHONETE TEXACO LTDA", "cnpj": "", "endereco": "AV AMELIA PAGANOTO, 278, 278", "cidade": "ROLANDIA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183845", "pedido": "189883", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "007261/01", "ds_cliente": "JOSE CARLOS VIALI LTDA", "cnpj": "", "endereco": "AV JOSE ANTONIO SANTIS, 673", "cidade": "ROLANDIA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183846", "pedido": "189968", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "013850/01", "ds_cliente": "SUPERMERCADO ALIANCA LTDA", "cnpj": "", "endereco": "AVENIDA ARAPONGAS, 669", "cidade": "ARAPONGAS", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183847", "pedido": "189969", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "010452/01", "ds_cliente": "MOLICENTER SUPERMERCADO LTDA", "cnpj": "", "endereco": "AVENIDA ARAPONGAS, 117, 117", "cidade": "ARAPONGAS", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183848", "pedido": "189971", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "013928/01", "ds_cliente": "SUPERMERCADO BOM DEMAIS MESMO LTDA", "cnpj": "", "endereco": "RUA TAPERACU, 195", "cidade": "ARAPONGAS", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183849", "pedido": "189967", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "012893/01", "ds_cliente": "ROUXINOL COMERCIAL DE ALIMENTOS LTDA", "cnpj": "", "endereco": "RUA ROUXINOL, 4735, 4735", "cidade": "ARAPONGAS", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183850", "pedido": "189970", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "010452/02", "ds_cliente": "MOLICENTER SUPERMERCADO LTDA", "cnpj": "", "endereco": "RUA CLOVIS DA FONCECA, 366", "cidade": "APUCARANA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183851", "pedido": "189965", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "013850/02", "ds_cliente": "SUPERMERCADO ALIANCA LTDA", "cnpj": "", "endereco": "PCA INTERVENTOR MANOEL RIBAS, 09", "cidade": "APUCARANA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050701", "nr_nf": "000183852", "pedido": "189906", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "RAFAEL ARANDA MAZOQUIM", "placa": "ASR9G14", "cd_cliente": "003794/03", "ds_cliente": "CONDOR SUPER CENTER LTDA", "cnpj": "", "endereco": "RUA MINAS GERAIS, 881", "cidade": "APUCARANA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183784", "pedido": "189866", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "005457/01", "ds_cliente": "FINCO & CIA LTDA", "cnpj": "", "endereco": "RUA CORIPHEU DE AZEVEDO MARQUES, 190, 190", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183785", "pedido": "189861", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "003719/02", "ds_cliente": "COMERCIO DE GENEROS ALIMENTICIOS SCAA LTDA", "cnpj": "", "endereco": "RUA PIONEIRO ALFREDO JOSE DA COSTA, 1244", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183786", "pedido": "189865", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "005215/05", "ds_cliente": "F K COMERCIO DE ALIMENTOS E PARTICIPACOES LTDA", "cnpj": "", "endereco": "AVENIDA SAO DOMINGOS, 1474", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183787", "pedido": "189799", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "014651/01", "ds_cliente": "SUPERMERCADOS BURCI LTDA", "cnpj": "", "endereco": "RUA RIO TAPEROA, 1146 Q, 1146", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183788", "pedido": "189795", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "006591/46", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV COLOMBO, 2720", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183789", "pedido": "189789", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "043681/01", "ds_cliente": "SUPERMERCADO VIDA LTDA", "cnpj": "", "endereco": "AVENIDA  MANDACARU, 3855, 3855", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183790", "pedido": "189800", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "014603/01", "ds_cliente": "SUPERMERCADO VENEZA LTDA", "cnpj": "", "endereco": "AVENIDA VEREADOR ANTONIO BORTOLOTTO, 353", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183791", "pedido": "189803", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "012985/01", "ds_cliente": "S H DE ARAUJO & CIA LTDA", "cnpj": "", "endereco": "AV MARINGA, 2506", "cidade": "SARANDI", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050801", "nr_nf": "000183792", "pedido": "189805", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "MOACIR BONATTI NETO", "placa": "AZU2043", "cd_cliente": "006773/01", "ds_cliente": "J. C. DE ARAUJO E CIA LTDA", "cnpj": "", "endereco": "RUA JOSE MUNHOZ, 120", "cidade": "SARANDI", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183795", "pedido": "189942", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "072527/01", "ds_cliente": "61.819.893 WANDERLEY FARIAS DE ALMEIDA.", "cnpj": "", "endereco": "R DA LAPA, 471", "cidade": "LONDRINA", "vendedor": "RODRIGO GLAUBER CORREA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183796", "pedido": "189762", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "037017/01", "ds_cliente": "JUNIORS RESTAURANTE LTDA", "cnpj": "", "endereco": "R MANAUS, 54, 54", "cidade": "LONDRINA", "vendedor": "RODRIGO GLAUBER CORREA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183797", "pedido": "189769", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "040273/01", "ds_cliente": "WELLINGTON LUIZ CLARO RESTAURANTE CHINES", "cnpj": "", "endereco": "AV JORGE CASONI, 1394", "cidade": "LONDRINA", "vendedor": "RODRIGO GLAUBER CORREA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183798", "pedido": "189786", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "065686/01", "ds_cliente": "DOCE VIDA COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA THEODORO VICTORELLI, 150, 150", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183799", "pedido": "189905", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "065686/01", "ds_cliente": "DOCE VIDA COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA THEODORO VICTORELLI, 150, 150", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183800", "pedido": "189773", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "071843/01", "ds_cliente": "SUPERMERCADO 88 LTDA", "cnpj": "", "endereco": "AVENIDA DAS MARITACAS, 1546", "cidade": "LONDRINA", "vendedor": "RODRIGO GLAUBER CORREA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183801", "pedido": "189898", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "074452/01", "ds_cliente": "RESTAURANTE BOM GOSTO HU LTDA", "cnpj": "", "endereco": "AV ROBERT KOCH, 695", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183802", "pedido": "189869", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "071961/01", "ds_cliente": "MERCADO DAS AMERICAS LTDA", "cnpj": "", "endereco": "AVENIDA DAS AMERICAS, 350, 350, 350", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183803", "pedido": "189939", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "074486/01", "ds_cliente": "LR COMERCIO DE CARNES LTDA", "cnpj": "", "endereco": "AV EUROPA, 1075", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183804", "pedido": "189794", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "071970/01", "ds_cliente": "MERCADO OLIVEIRA MOREIRA LTDA", "cnpj": "", "endereco": "R MADRE HENRIQUETA DOMINICI, 911", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183805", "pedido": "189820", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "037564/01", "ds_cliente": "MACEDO PADARIA E MERCADO LTDA", "cnpj": "", "endereco": "R TREVO BRANCO-322", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183806", "pedido": "189878", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "014507/02", "ds_cliente": "SUPERMERCADO SHIKI LTDA", "cnpj": "", "endereco": "RUA SERRA DE RORAIMA, 410", "cidade": "LONDRINA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183807", "pedido": "189357", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "014687/01", "ds_cliente": "SUPERMERCADOS QUINELATO LTDA", "cnpj": "", "endereco": "RUA PLUTAO, 22", "cidade": "LONDRINA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183807", "pedido": "189357", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "014687/01", "ds_cliente": "SUPERMERCADOS QUINELATO LTDA", "cnpj": "", "endereco": "RUA PLUTAO, 22", "cidade": "LONDRINA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183808", "pedido": "189859", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "057131/01", "ds_cliente": "L. D. ISA FABRICA MEIA ROTATORIA LTDA", "cnpj": "", "endereco": "AV LUCILIO DE HELD, 655", "cidade": "LONDRINA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183809", "pedido": "189899", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "012521/01", "ds_cliente": "RESTAURANTE TOCA DO CATETO LTDA", "cnpj": "", "endereco": "RUA ANGELO MIOTO, 698, 698", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183810", "pedido": "189900", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "012521/01", "ds_cliente": "RESTAURANTE TOCA DO CATETO LTDA", "cnpj": "", "endereco": "RUA ANGELO MIOTO, 698, 698", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183811", "pedido": "189645", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "068996/01", "ds_cliente": "A. K. MIYAZAKI DOS SANTOS & CIA LTDA", "cnpj": "", "endereco": "R LUIZ CARLOS DE CASTRO COSTA, 278, 278", "cidade": "LONDRINA", "vendedor": "OCTAVIO AUGUSTO LONGO"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183812", "pedido": "189834", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "063417/01", "ds_cliente": "S. SUPERMERCADO LTDA", "cnpj": "", "endereco": "AVENIDA GABRIEL FRECEIRO DE MIRANDA, 360", "cidade": "CAMBE", "vendedor": "RODRIGO GLAUBER CORREA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183813", "pedido": "189979", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "002038/10", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA GABRIEL FRECEIRO DE MIRANDA, 1125", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183813", "pedido": "189979", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "002038/10", "ds_cliente": "BRUXELAS COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA GABRIEL FRECEIRO DE MIRANDA, 1125", "cidade": "CAMBE", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03050901", "nr_nf": "000183814", "pedido": "189838", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "BBR1E62", "cd_cliente": "074477/01", "ds_cliente": "AERKI FOODS INDUSTRIA LTDA", "cnpj": "", "endereco": "RUA PROJETADA C, 0", "cidade": "IBIPORA", "vendedor": "MARCOS RONEY FERNANDES"}, {"filial": "01052", "romaneio": "03051001", "nr_nf": "000183834", "pedido": "189792", "transportadora": "V C - TRANSPORTE LTDA.", "motorista": "RAFAEL BRUNO COMO", "placa": "FUN2F74", "cd_cliente": "006591/72", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV LEOPOLDINA, 1005", "cidade": "CIANORTE", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051001", "nr_nf": "000183835", "pedido": "189920", "transportadora": "V C - TRANSPORTE LTDA.", "motorista": "RAFAEL BRUNO COMO", "placa": "FUN2F74", "cd_cliente": "006591/72", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV LEOPOLDINA, 1005", "cidade": "CIANORTE", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051001", "nr_nf": "000183836", "pedido": "189797", "transportadora": "V C - TRANSPORTE LTDA.", "motorista": "RAFAEL BRUNO COMO", "placa": "FUN2F74", "cd_cliente": "006591/A0", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "R JAMIL HELU, 3997", "cidade": "UMUARAMA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051101", "nr_nf": "000183829", "pedido": "189815", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "RAFAEL AUGUSTO URIAS", "placa": "JQZ0D16", "cd_cliente": "011935/01", "ds_cliente": "R. J. GAZOLLA LTDA", "cnpj": "", "endereco": "AV 14 DE DEZEMBRO, 1148", "cidade": "NOVA ESPERANCA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051101", "nr_nf": "000183830", "pedido": "189922", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "RAFAEL AUGUSTO URIAS", "placa": "JQZ0D16", "cd_cliente": "072966/01", "ds_cliente": "RESTAURANTE JANGADA V LTDA", "cnpj": "", "endereco": "ROD BR 376, SN", "cidade": "NOVA ESPERANCA", "vendedor": "JONATAS WESLEY RODRIGUES DOS SANTOS"}, {"filial": "01052", "romaneio": "03051101", "nr_nf": "000183831", "pedido": "189897", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "RAFAEL AUGUSTO URIAS", "placa": "JQZ0D16", "cd_cliente": "006591/41", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV DISTRITO FEDERAL, 1005", "cidade": "PARANAVAI", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051101", "nr_nf": "000183832", "pedido": "189916", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "RAFAEL AUGUSTO URIAS", "placa": "JQZ0D16", "cd_cliente": "006591/41", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV DISTRITO FEDERAL, 1005", "cidade": "PARANAVAI", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051101", "nr_nf": "000183833", "pedido": "189919", "transportadora": "J CARDOSO TRANSPORTES LTDA", "motorista": "RAFAEL AUGUSTO URIAS", "placa": "JQZ0D16", "cd_cliente": "014630/01", "ds_cliente": "SUPERMERCADO ZANZARINI LTDA", "cnpj": "", "endereco": "RUA NELSON TRIZZI, 1150, 1150", "cidade": "DIAMANTE DO NORTE", "vendedor": "JONATAS WESLEY RODRIGUES DOS SANTOS"}, {"filial": "01052", "romaneio": "03051201", "nr_nf": "000183793", "pedido": "189814", "transportadora": "DODO TRANSPORTES LTDA", "motorista": "FLAVIANO DA SILVA PEDROSO", "placa": "QIR0E71", "cd_cliente": "008020/01", "ds_cliente": "LEJON COMERCIO ATACADISTA DE PRODUTOS ALIMENTICIOS LTDA", "cnpj": "", "endereco": "AV CARNEIRO LEAO, 582", "cidade": "MARINGA", "vendedor": "JULIANA CASTRO DO NASCIMENTO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183770", "pedido": "189930", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/61", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA JUSCELINO KUBITSCHEK, 2606", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183771", "pedido": "189881", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/35", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV ROBERT KOCH, 20", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183772", "pedido": "189933", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/35", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV ROBERT KOCH, 20", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183773", "pedido": "189924", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/03", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA PRESIDENTE EURICO GASPAR DUTRA, 55", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183774", "pedido": "189937", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/03", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA PRESIDENTE EURICO GASPAR DUTRA, 55", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183775", "pedido": "189904", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/33", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "RUA MADRE LEONIA MILITO, 1175", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183776", "pedido": "189921", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/54", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "RUA AYRTON SENNA DA SILVA, 400", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183777", "pedido": "189928", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/54", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "RUA AYRTON SENNA DA SILVA, 400", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051301", "nr_nf": "000183778", "pedido": "189936", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MAICON CLEBERTON CREPE", "placa": "RHH0B72", "cd_cliente": "006591/97", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "R MARIA ALVES BERGAMO, 800", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183815", "pedido": "189903", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "006591/32", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV CERRO AZUL, 2075", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183816", "pedido": "189911", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "006591/32", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV CERRO AZUL, 2075", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183817", "pedido": "189914", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "006591/62", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV SAO PAULO, 1197", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183818", "pedido": "189923", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "006591/02", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA JOAO PAULINO VIEIRA FILHO, 190", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183819", "pedido": "189864", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005215/04", "ds_cliente": "F K COMERCIO DE ALIMENTOS E PARTICIPACOES LTDA", "cnpj": "", "endereco": "AVENIDA PARANA, 1440", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183820", "pedido": "189867", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005215/03", "ds_cliente": "F K COMERCIO DE ALIMENTOS E PARTICIPACOES LTDA", "cnpj": "", "endereco": "AVENIDA SAO PAULO, 217", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183821", "pedido": "189863", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005215/01", "ds_cliente": "F K COMERCIO DE ALIMENTOS E PARTICIPACOES LTDA", "cnpj": "", "endereco": "AVENIDA BRASIL, 1981", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183822", "pedido": "189872", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005215/02", "ds_cliente": "F K COMERCIO DE ALIMENTOS E PARTICIPACOES LTDA", "cnpj": "", "endereco": "AVENIDA BRASIL, 1103", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183823", "pedido": "189790", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "043681/02", "ds_cliente": "SUPERMERCADO VIDA LTDA", "cnpj": "", "endereco": "RUA TULIPA, 769, 769", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183824", "pedido": "189926", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "006591/05", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV COLOMBO, 9161", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183825", "pedido": "189927", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "006591/05", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV COLOMBO, 9161", "cidade": "MARINGA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183826", "pedido": "189860", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005458/01", "ds_cliente": "FINCO & FINCO LTDA", "cnpj": "", "endereco": "AVENIDA IVAI, 927, 927", "cidade": "PAICANDU", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183827", "pedido": "189862", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005458/03", "ds_cliente": "FINCO & FINCO LTDA", "cnpj": "", "endereco": "AVENIDA CURITIBA, 1697", "cidade": "PAICANDU", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051401", "nr_nf": "000183828", "pedido": "189868", "transportadora": "E H VIEIRA TRANSPORTE RODOVIARIO DE CARG", "motorista": "EMERSON HENRIQUE VIEIRA", "placa": "RTS0I75", "cd_cliente": "005458/02", "ds_cliente": "FINCO & FINCO LTDA", "cnpj": "", "endereco": "AVENIDA VEREADOR SILVIO ALVES, 877", "cidade": "PAICANDU", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051501", "nr_nf": "000183794", "pedido": "189674", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "PAULO SERGIO MOREIRA LOPES", "placa": "RVC1F15", "cd_cliente": "013126/16", "ds_cliente": "SANCHES E VECCHIATE LTDA", "cnpj": "", "endereco": "RUA PAULO VINICIUS DE OLIVEIRA DAMAS, 47", "cidade": "APUCARANA", "vendedor": "BOIADEIRO REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03051601", "nr_nf": "000183767", "pedido": "189830", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "FABIO RIBEIRO CALDAS", "placa": "RVD0J89", "cd_cliente": "006591/07", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "RUA TINGUACU, 38", "cidade": "ARAPONGAS", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051601", "nr_nf": "000183768", "pedido": "189909", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "FABIO RIBEIRO CALDAS", "placa": "RVD0J89", "cd_cliente": "006591/69", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "RUA BELA VISTA, 99", "cidade": "APUCARANA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051601", "nr_nf": "000183769", "pedido": "189813", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "FABIO RIBEIRO CALDAS", "placa": "RVD0J89", "cd_cliente": "006591/42", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV MINAS GERAIS, 385", "cidade": "APUCARANA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183853", "pedido": "189889", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "000001/52", "ds_cliente": "GONCALVES & TORTOLA S/A", "cnpj": "", "endereco": "ROD BR 376, KM 252", "cidade": "APUCARANA", "vendedor": "LUIZ MAURO FAN PEDROSO FILHO"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183854", "pedido": "189944", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "000001/52", "ds_cliente": "GONCALVES & TORTOLA S/A", "cnpj": "", "endereco": "ROD BR 376, KM 252", "cidade": "APUCARANA", "vendedor": "LUIZ MAURO FAN PEDROSO FILHO"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183855", "pedido": "189665", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "070390/01", "ds_cliente": "LUZ COMERCIO E SERVICOS LTDA", "cnpj": "", "endereco": "AVENIDA BRASIL, 3469", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183856", "pedido": "189812", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "019012/01", "ds_cliente": "DANIELA GONCALVES GARCIA RESTAURANTE", "cnpj": "", "endereco": "AV HERVAL, 382, 382", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183857", "pedido": "189809", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "061949/01", "ds_cliente": "ELIZANGELA STORTO SINHORELI LTDA", "cnpj": "", "endereco": "AVENIDA DUQUE DE CAXIAS, 462", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183858", "pedido": "189989", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "024166/01", "ds_cliente": "LOPES & PEROMALLE LTDA", "cnpj": "", "endereco": "AVENIDA DOUTOR LUIZ TEIXEIRA MENDES, 1115, 1115", "cidade": "MARINGA", "vendedor": "LEONARDO GONCALVES TORTOLA"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183859", "pedido": "189823", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "004469/01", "ds_cliente": "DOLCE CAFE PANIFICADORA LTDA ME", "cnpj": "", "endereco": "AV JOAO PAULINO VIEIRA FILHO, 870", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183860", "pedido": "189808", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "037694/01", "ds_cliente": "BRIOCHE CROCANTE PANIFICADORA E CONFEITARIA LTDA", "cnpj": "", "endereco": "AV PARANA, 1511, 1511", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183861", "pedido": "189908", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "003794/44", "ds_cliente": "CONDOR SUPER CENTER LTDA", "cnpj": "", "endereco": "AV PARANA, 1600", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183862", "pedido": "189885", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "072725/01", "ds_cliente": "COFFEE BLACK COMERCIO E SERVICOS LTDA", "cnpj": "", "endereco": "RUA QUINTINO BOCAIUVA, 1230", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183863", "pedido": "189913", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "029979/01", "ds_cliente": "P CAMPOS JUNIOR - COMERCIO DE ALIMENTOS - ME", "cnpj": "", "endereco": "RUA MISS MARIA MARTA MANTOVANI, 330, 330, 330", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183864", "pedido": "189984", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "065010/01", "ds_cliente": "A F DA SILVA GENEROS ALIMENTICIOS", "cnpj": "", "endereco": "AVENIDA PINTASSILGO, 976", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183865", "pedido": "189819", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "037633/01", "ds_cliente": "LUCINEIA FRANCISCO DE SOUZA BRUSTOLIM RESTAURANTE", "cnpj": "", "endereco": "AV PIONEIRO JOAO PEREIRA-3917, 3917", "cidade": "MARINGA", "vendedor": "TIAGO FERNANDO RADIN"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183866", "pedido": "189759", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "067336/01", "ds_cliente": "DELIVIO E ALMEIDA COMERCIO DE ALIMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA VEREADOR ANTONIO BORTOLOTTO, 896", "cidade": "MARINGA", "vendedor": "TIAGO FERNANDO RADIN"}, {"filial": "01052", "romaneio": "03051701", "nr_nf": "000183867", "pedido": "189917", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "MAICON DOUGLAS DOS SANTOS SAGRILO", "placa": "RVE0H38", "cd_cliente": "074163/01", "ds_cliente": "R L PAIOLA RESTAURANTE", "cnpj": "", "endereco": "RUA SAO PEDRO, 618", "cidade": "MANDAGUACU", "vendedor": "TIAGO FERNANDO RADIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183752", "pedido": "189802", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "011462/01", "ds_cliente": "PAVAN E MARTON LTDA", "cnpj": "", "endereco": "RUA VEREADOR APARECIDO SCANDELAI, 2027, 2027", "cidade": "SANTA FE", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183753", "pedido": "189727", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "072711/01", "ds_cliente": "SRA. DESCONTAO GENEROS ALIMENTICIOS LTDA", "cnpj": "", "endereco": "CARIOVALDO A. FERREIRA, 125", "cidade": "MARIALVA", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183754", "pedido": "189785", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "003103/01", "ds_cliente": "CHURRASCARIA AMIGAO LTDA", "cnpj": "", "endereco": "RODOVIA BR 376, 0, 0", "cidade": "MARIALVA", "vendedor": "A & D REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183755", "pedido": "189793", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "046691/01", "ds_cliente": "MERCADO SUPER ECONOMICO LTDA", "cnpj": "", "endereco": "AV ENEAS MODESTO DE OLIVEIRA-597, 597, 597, 597, 597", "cidade": "MARIALVA", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183756", "pedido": "189672", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "046487/01", "ds_cliente": "LUIZ CRISTOVAO RODRIGUES JUNIOR", "cnpj": "", "endereco": "RUA FRANCISCO PALMA, 260", "cidade": "MARIALVA", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183757", "pedido": "189941", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "024389/01", "ds_cliente": "MARINGA FUTEBOL CLUBE S A F", "cnpj": "", "endereco": "AV PIONEIRA DEVIGE CREPALDI SCHIAVONI, 1651, 1651, 1651", "cidade": "MARINGA", "vendedor": "LUIZ MAURO FAN PEDROSO FILHO"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183758", "pedido": "189884", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "011974/01", "ds_cliente": "R Y ONO DOCES", "cnpj": "", "endereco": "RUA MAL MASCARENHAS DE MORAES, 200", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183759", "pedido": "189783", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "005595/01", "ds_cliente": "FRANGO FRITO PIZZARIA LTDA", "cnpj": "", "endereco": "AV TUIUTI, 1797", "cidade": "MARINGA", "vendedor": "A & D REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183760", "pedido": "189887", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "007828/01", "ds_cliente": "RESTAURANTE SHIRMAR LTDA", "cnpj": "", "endereco": "AV GUAIAPO, 3081", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183761", "pedido": "189632", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "059896/01", "ds_cliente": "DA COSTA PANIFICADORA E CONFEITARIA LTDA", "cnpj": "", "endereco": "AVENIDA DONA SOPHIA RASGULAEFF, 3258, 3258", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183762", "pedido": "189875", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "000206/01", "ds_cliente": "A V MARQUES CARNES", "cnpj": "", "endereco": "AV FRANKLIN DELANO ROOSEVELT, 2382, 2382, 2382", "cidade": "MARINGA", "vendedor": "A & D REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183763", "pedido": "189761", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "073386/01", "ds_cliente": "NEUZA MARIA DE MELO 82677247968", "cnpj": "", "endereco": "RUA AMERICA, 117", "cidade": "SARANDI", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183764", "pedido": "189779", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "013507/01", "ds_cliente": "SIRLEI GOMES DE AQUINO", "cnpj": "", "endereco": "RUA CEZARIO MANCINE, 422", "cidade": "SARANDI", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183765", "pedido": "189766", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "059998/01", "ds_cliente": "F R DE LIMA MINIMERCADO", "cnpj": "", "endereco": "AVENIDA PIONEIRA MARIA LEIBANTTI BROGIO, 1145", "cidade": "SARANDI", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051801", "nr_nf": "000183766", "pedido": "189763", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JOSE GERMANO SOARES", "placa": "RVE0H46", "cd_cliente": "072605/01", "ds_cliente": "ROBSON DE OLIVEIRA 05628005908", "cnpj": "", "endereco": "R GOVERNADOR AFONSO CAMARGO, 307, 307", "cidade": "SARANDI", "vendedor": "MAYCON RODRIGO PUPULIN"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183736", "pedido": "189842", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "075228/01", "ds_cliente": "EXPRESS MARINGA ALIMENTOS LTDA", "cnpj": "", "endereco": "AV SAO PAULO, 743", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183737", "pedido": "189824", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "006024/01", "ds_cliente": "GOLDEN INGA HOTEL LTDA", "cnpj": "", "endereco": "RUA NEO ALVES MARTINS, 2398", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183738", "pedido": "189850", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "064099/01", "ds_cliente": "USIFARMA COMERCIO DE MEDICAMENTOS LTDA", "cnpj": "", "endereco": "AVENIDA CIDADE DE LEIRIA, 493, 493", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183739", "pedido": "189892", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "037546/01", "ds_cliente": "ARAUJO & MINEO LTDA", "cnpj": "", "endereco": "AV BRASIL, 4962, 4962", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183740", "pedido": "189811", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "006533/01", "ds_cliente": "IPS RESTAURANTE LTDA", "cnpj": "", "endereco": "AVENIDA CURITIBA, 278, 278", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183741", "pedido": "189891", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "071475/01", "ds_cliente": "TK BAR E RESTAURANTE LTDA", "cnpj": "", "endereco": "AVENIDA CURITIBA, 289, 289, 289", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183742", "pedido": "189624", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "007804/01", "ds_cliente": "LANCHONETE 2000 LTDA", "cnpj": "", "endereco": "AV LUIZ TEIXEIRA MENDES, 1932", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183743", "pedido": "189810", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "027141/01", "ds_cliente": "PANQUECARIA GIRASSOL LTDA", "cnpj": "", "endereco": "AVENIDA INDEPENDENCIA, 202, 202", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183744", "pedido": "189886", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "024494/01", "ds_cliente": "PG RESTAURANTE LTDA", "cnpj": "", "endereco": "AVENIDA 19 DE DEZEMBRO, 229", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183745", "pedido": "189882", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "037596/02", "ds_cliente": "RESTAURANTE E LANCHONETE CAPRA LTDA", "cnpj": "", "endereco": "AVENIDA COLOMBO, 4614, 4614", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183746", "pedido": "189918", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "003794/46", "ds_cliente": "CONDOR SUPER CENTER LTDA", "cnpj": "", "endereco": "AVENIDA COLOMBO, 3404, 3404", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183747", "pedido": "189893", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "036769/01", "ds_cliente": "MERCADAO DE CARNES IMPERADOR LTDA", "cnpj": "", "endereco": "AVENIDA PEDRO TAQUES, 4578", "cidade": "MARINGA", "vendedor": "A & D REPRESENTACOES COMERCIAIS LTDA"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183748", "pedido": "189888", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "059542/01", "ds_cliente": "J H V RODRIGUES RESTAURANTE E CAFE LTDA", "cnpj": "", "endereco": "AVENIDA CARLOS CORREA BORGES, 969", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183749", "pedido": "189712", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "057968/01", "ds_cliente": "GV RESTAURANTE LTDA", "cnpj": "", "endereco": "AV COLOMBO, 9161, 9161", "cidade": "MARINGA", "vendedor": "SERGIO FABIANO NEIVERTH"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183750", "pedido": "189694", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "060602/01", "ds_cliente": "54.676.841 JOSIELLE SOUZA DOS SANTOS", "cnpj": "", "endereco": "R PIONEIRO ARLINDO PEDRALLI , 935, 935", "cidade": "MARINGA", "vendedor": "JOAO VITOR ARENAS MARCATO"}, {"filial": "01052", "romaneio": "03051901", "nr_nf": "000183751", "pedido": "189817", "transportadora": "GONCALVES & TORTOLA S/A", "motorista": "JULIO FELIX DA SILVA", "placa": "RVE0H48", "cd_cliente": "057374/01", "ds_cliente": "V SARETTO & SARETTO LTDA", "cnpj": "", "endereco": "ROD PR 323, 0", "cidade": "DOUTOR CAMARGO", "vendedor": "TIAGO FERNANDO RADIN"}, {"filial": "01052", "romaneio": "03052001", "nr_nf": "000183779", "pedido": "189901", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "LEONARDO ASSIS ORBEM", "placa": "SER3F67", "cd_cliente": "006591/17", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "R QUINTINO BOCAIUVA, 1045", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052001", "nr_nf": "000183780", "pedido": "189832", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "LEONARDO ASSIS ORBEM", "placa": "SER3F67", "cd_cliente": "006591/75", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "EST DOS PIONEIROS, 2155", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052001", "nr_nf": "000183781", "pedido": "189791", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "LEONARDO ASSIS ORBEM", "placa": "SER3F67", "cd_cliente": "006591/55", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV AMERICO DEOLINDO GARLA, 224", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052001", "nr_nf": "000183782", "pedido": "189934", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "LEONARDO ASSIS ORBEM", "placa": "SER3F67", "cd_cliente": "006591/16", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV SAUL ELKIND, 2177", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052001", "nr_nf": "000183783", "pedido": "189931", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "LEONARDO ASSIS ORBEM", "placa": "SER3F67", "cd_cliente": "006591/26", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AV RONAT WALTER SODRE, 300", "cidade": "IBIPORA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052101", "nr_nf": "000183731", "pedido": "189836", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MARCELO PEDRO BARBOZA", "placa": "SFB1C02", "cd_cliente": "006591/19", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA TIRADENTES, 2200", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052101", "nr_nf": "000183732", "pedido": "189938", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MARCELO PEDRO BARBOZA", "placa": "SFB1C02", "cd_cliente": "006591/19", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA TIRADENTES, 2200", "cidade": "LONDRINA", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052101", "nr_nf": "000183733", "pedido": "189833", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MARCELO PEDRO BARBOZA", "placa": "SFB1C02", "cd_cliente": "006591/39", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "R CARLOS SAWADE, 408", "cidade": "CAMBE", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052101", "nr_nf": "000183734", "pedido": "189831", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MARCELO PEDRO BARBOZA", "placa": "SFB1C02", "cd_cliente": "006591/70", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA GABRIEL FRECEIRO DE MIRANDA, 1516", "cidade": "CAMBE", "vendedor": "ALESSANDRA BORGATO"}, {"filial": "01052", "romaneio": "03052101", "nr_nf": "000183735", "pedido": "189816", "transportadora": "MF TRANSPORTADORA LTDA", "motorista": "MARCELO PEDRO BARBOZA", "placa": "SFB1C02", "cd_cliente": "006591/67", "ds_cliente": "IRMAOS MUFFATO & CIA LTDA", "cnpj": "", "endereco": "AVENIDA PRESIDENTE GETULIO VARGAS, 3634", "cidade": "ROLANDIA", "vendedor": "ALESSANDRA BORGATO"}];
+
+// Deduplica por NF + cliente (mantém única)
+const seen = new Set();
+const DATA = RAW.filter(r => {
+  const key = r.nr_nf + '|' + r.cd_cliente;
+  if (seen.has(key)) return false;
+  seen.add(key);
+  return true;
+});
+
+// Normaliza cidade (remove acentos para comparação)
+function norm(s) { return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim(); }
+
+let sortCol = 'nr_nf', sortDir = 1;
+let filtered = [...DATA];
+
+function buildSelects() {
+  const motoristas = [...new Set(DATA.map(r => r.motorista).filter(Boolean))].sort();
+  const placas     = [...new Set(DATA.map(r => r.placa).filter(Boolean))].sort();
+  const cidades    = [...new Set(DATA.map(r => r.cidade).filter(Boolean).map(c => c.trim().toUpperCase()))].sort();
+  const vendedores = [...new Set(DATA.map(r => r.vendedor).filter(Boolean))].sort();
+
+  const fill = (id, arr) => {
+    const sel = document.getElementById(id);
+    arr.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      sel.appendChild(o);
+    });
+  };
+  fill('f-motorista', motoristas);
+  fill('f-placa', placas);
+  fill('f-cidade', cidades);
+  fill('f-vendedor', vendedores);
+}
+
+function updateStats() {
+  const nfs  = new Set(DATA.map(r => r.nr_nf));
+  const mots = new Set(DATA.map(r => r.motorista));
+  const cids = new Set(DATA.map(r => norm(r.cidade)));
+  const clis = new Set(DATA.map(r => r.cd_cliente));
+  document.getElementById('total-nfs').textContent = nfs.size;
+  document.getElementById('total-motoristas').textContent = mots.size;
+  document.getElementById('total-cidades').textContent = cids.size;
+  document.getElementById('total-clientes').textContent = clis.size;
+  document.getElementById('count-tot').textContent = DATA.length;
+}
+
+function applyFilters() {
+  const busca    = norm(document.getElementById('f-busca').value);
+  const motorista= document.getElementById('f-motorista').value;
+  const placa    = document.getElementById('f-placa').value;
+  const cidade   = document.getElementById('f-cidade').value;
+  const vendedor = document.getElementById('f-vendedor').value;
+
+  filtered = DATA.filter(r => {
+    if (motorista && r.motorista !== motorista) return false;
+    if (placa && r.placa !== placa) return false;
+    if (cidade && norm(r.cidade) !== norm(cidade)) return false;
+    if (vendedor && r.vendedor !== vendedor) return false;
+    if (busca) {
+      const hay = norm([r.nr_nf, r.cd_cliente, r.ds_cliente, r.endereco, r.pedido, r.romaneio, r.cnpj].join(' '));
+      if (!hay.includes(busca)) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    const va = (a[sortCol]||'').toString().toLowerCase();
+    const vb = (b[sortCol]||'').toString().toLowerCase();
+    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+  });
+
+  render();
+}
+
+function render() {
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('empty-msg');
+  document.getElementById('count-vis').textContent = filtered.length;
+
+  if (!filtered.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(r => `
+    <tr>
+      <td><span class="nf-badge">${r.nr_nf}</span></td>
+      <td style="color:var(--muted);font-size:.78rem">${r.romaneio}</td>
+      <td class="motorista-text">${r.motorista || '—'}</td>
+      <td><span class="placa-badge">${r.placa || '—'}</span></td>
+      <td>
+        <span class="cliente-name">${r.ds_cliente}</span>
+        <span class="cliente-cod">${r.cd_cliente}</span>
+      </td>
+      <td><span class="cidade-tag">📍 ${(r.cidade||'').trim()}</span></td>
+      <td class="vendedor-text">${r.vendedor || '—'}</td>
+      <td style="color:var(--muted);font-size:.77rem;max-width:220px">${r.endereco || '—'}</td>
+    </tr>
+  `).join('');
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = 1; }
+
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+  const idx = ['nr_nf','romaneio','motorista','placa','cd_cliente','cidade','vendedor','endereco'].indexOf(col);
+  if (idx >= 0) document.querySelectorAll('thead th')[idx].classList.add('sorted');
+
+  applyFilters();
+}
+
+function clearFilters() {
+  document.getElementById('f-busca').value = '';
+  document.getElementById('f-motorista').value = '';
+  document.getElementById('f-placa').value = '';
+  document.getElementById('f-cidade').value = '';
+  document.getElementById('f-vendedor').value = '';
+  applyFilters();
+}
+
+['f-busca','f-motorista','f-placa','f-cidade','f-vendedor'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', applyFilters);
+});
+
+buildSelects();
+updateStats();
+applyFilters();
+</script>
+</body>
+</html>
